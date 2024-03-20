@@ -14,8 +14,8 @@ pub struct GitlabReleases {
 
 #[derive(Debug, Deserialize)]
 pub struct Release {
-    name: String,
-    tag_name: String,
+    pub name: String,
+    pub tag_name: String,
 }
 
 #[derive(Debug, Deserialize)]

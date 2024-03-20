@@ -1,9 +1,13 @@
-use crate::artifact::{Artifact, Version};
+use std::borrow::Cow;
+use std::vec::Vec;
+
 use anyhow::{bail, Context};
 use aws_config::meta::region::RegionProviderChain;
 use aws_sdk_s3::Client;
-use log::warn;
+use log::{debug, warn};
 use regex::Regex;
+
+use crate::artifact::{Artifact, Version};
 
 pub struct S3Indexer {
     client: Client,
@@ -94,5 +98,21 @@ impl S3Indexer {
         }
 
         Ok(paths)
+    }
+
+    pub async fn download(&self, artifact: &Artifact) -> anyhow::Result<Vec<u8>> {
+        let mut object = self
+            .client
+            .get_object()
+            .bucket(&self.bucket)
+            .key(&artifact.s3_path)
+            .send()
+            .await?;
+
+        let mut out = Vec::<u8>::new();
+        while let Some(bytes) = object.body.try_next().await? {
+            out.extend_from_slice(&bytes);
+        }
+        Ok(out)
     }
 }
