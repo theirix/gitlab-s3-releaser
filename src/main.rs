@@ -26,6 +26,10 @@ struct Opt {
     #[arg(long)]
     project: String,
 
+    // GitLab project
+    #[arg(long)]
+    package: String,
+
     /// Whether to run without sending to CloudWatch
     #[arg(short, long)]
     dryrun: bool,
@@ -46,6 +50,7 @@ async fn main() -> anyhow::Result<()> {
         opt.gitlab_host,
         gitlab_token,
         opt.project,
+        opt.package,
     )
     .await;
     match result {
