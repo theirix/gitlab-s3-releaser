@@ -1,10 +1,9 @@
-use std::borrow::Cow;
 use std::vec::Vec;
 
 use anyhow::{bail, Context};
 use aws_config::meta::region::RegionProviderChain;
 use aws_sdk_s3::Client;
-use log::{debug, warn};
+use log::warn;
 use regex::Regex;
 
 use crate::artifact::{Artifact, Version};

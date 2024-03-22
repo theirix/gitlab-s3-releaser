@@ -24,12 +24,19 @@ pub async fn main_runner(
     let artifacts = indexer.list().await?;
 
     let existing_gitlab_releases: HashSet<String> =
-        releases.iter().map(|r| r.tag_name.clone()).collect();
+        releases.into_iter().map(|r| r.tag_name).collect();
     info!("Found Gitlab Releases: {existing_gitlab_releases:?}");
+
+    let tags = gitlab_releases.list_tags().await?;
+    info!("Found Gitlab tags: {tags:?}");
+
     for artifact in artifacts {
-        let exists = existing_gitlab_releases.contains(&artifact.version);
-        if exists {
-            info!("Found already existing artifact {artifact:?} in S3");
+        let release_exists = existing_gitlab_releases.contains(&artifact.version);
+        let tag_exists = tags.contains(&artifact.version);
+        if release_exists {
+            info!("Found already existing artifact {artifact:?} in GitLab");
+        } else if !tag_exists {
+            info!("Found artifact {artifact:?} in S3 but there is not tag in GitLab");
         } else {
             info!("Found new artifact {artifact:?} in S3");
             let contents = indexer
@@ -39,9 +46,16 @@ pub async fn main_runner(
             info!("Downloaded {} bytes", contents.len());
 
             gitlab_releases
-                .add_package(&package_name, artifact, contents)
+                .add_package(&package_name, &artifact, contents)
                 .await
                 .context("Cannot add package")?;
+            info!("Created package");
+
+            let release = gitlab_releases
+                .add_release(&package_name, &artifact)
+                .await
+                .context("Cannot add package")?;
+            info!("Created release {}", release.name);
         }
     }
     Ok(())
