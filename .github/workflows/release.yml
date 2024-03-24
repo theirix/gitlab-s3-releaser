@@ -68,7 +68,7 @@ jobs:
       - name: Make release notes from changelog
         uses: anton-yurchenko/git-release@v5
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GIT_RELEASE_TOKEN }}
 
   publish:
     name: Publish to crates.io
