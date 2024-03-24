@@ -14,7 +14,7 @@ jobs:
     steps:
       - id: setVariables
         run: |
-          echo "output=${GITHUB_REPOSITORY#*/}" >> $GITHUB_OUTPUT
+          echo "output=gitlab_s3_releaser" >> $GITHUB_OUTPUT
 
   artifacts:
     name: Publish target ${{ matrix.target }}

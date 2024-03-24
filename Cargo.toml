@@ -1,6 +1,6 @@
 [package]
 name = "gitlab_s3_releaser"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 authors = ["theirix <theirix@gmail.com>"]
 repository = "https://github.com/theirix/gitlab-s3-releaser"
