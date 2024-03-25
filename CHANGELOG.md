@@ -6,7 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.1.3] - 2024-03-24
+## [0.1.3] - 2024-03-25
+### Fixed
+- Clarify error messages
+
+## [0.1.2] - 2024-03-24
 ### Added
 - Fix uploading to GH
 
