@@ -27,7 +27,10 @@ pub async fn main_runner(
         releases.into_iter().map(|r| r.tag_name).collect();
     info!("Found Gitlab Releases: {existing_gitlab_releases:?}");
 
-    let tags = gitlab_releases.list_tags().await?;
+    let tags = gitlab_releases
+        .list_tags()
+        .await
+        .context("Cannot list tags")?;
     info!("Found Gitlab tags: {tags:?}");
 
     for artifact in artifacts {
